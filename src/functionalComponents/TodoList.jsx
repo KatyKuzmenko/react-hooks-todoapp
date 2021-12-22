@@ -1,50 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { getTodos, toggleAllTodos } from '../api/api'
 import { TODOS_INIT, TODOS_TOGGLE_ALL } from '../store/actionTypes'
 import { Loader } from './Loader'
-import { Modal } from './Modal'
-import { Todo } from './Todo'
-import { TodoListFooter } from './TodoFooter'
+import Modal from './Modal'
+import Todo from './Todo'
+import TodoListFooter from './TodoFooter'
 
-const TodoList = () => {
+const mapStateToProps = (state) => {
+  return {
+    todos: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleAllDispatch: (iscompleted) => {
+      dispatch({ type: TODOS_TOGGLE_ALL, options: { iscompleted } })
+    },
+    initializeStoreData: (todos) => {
+      dispatch({ type: TODOS_INIT, options: todos })
+    },
+  }
+}
+
+const TodoList = (props) => {
   const [filterType, setFilterType] = useState('all')
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpened, setIsModalOpened] = useState(false)
   const [idToRemove, setIdToRemove] = useState(null)
+
   useEffect(() => {
     setIsLoading(true)
     getTodos()
       .then((todosFromServer) => {
-        this.props.onInitialize(todosFromServer)
-        setIsLoading(false)
+        props.initializeStoreData(todosFromServer)
       })
       .catch((err) => console.warn(err))
+    setIsLoading(false)
   }, [])
 
   const toggleAll = (event) => {
     setIsLoading(true)
     toggleAllTodos(event.target.checked)
       .then((todos) => {
-        this.props.onToggleAll(todos)
+        props.toggleAllDispatch(todos)
         setIsLoading(false)
       })
       .catch((err) => console.warn(err))
   }
 
-  const activeTodos = this.props.store.filter((todo) => !todo.iscompleted)
-  const completedTodos = this.props.store.filter((todo) => todo.iscompleted)
+  const activeTodos = props.todos.filter((todo) => !todo.iscompleted)
+  const completedTodos = props.todos.filter((todo) => todo.iscompleted)
 
   const currentTodos = {
-    all: this.props.store,
+    all: props.todos,
     active: activeTodos,
     completed: completedTodos,
   }
-
   const visibleTodos = currentTodos[filterType]
   return (
     <>
-      <section className={this.props.store.length > 0 ? 'main' : 'main invisible'}>
+      <section className={props.todos.length > 0 ? 'main' : 'main invisible'}>
         <span className='toggle-all-container'>
           <input
             id='toggle-all'
@@ -59,37 +76,31 @@ const TodoList = () => {
               <Todo
                 todo={todo}
                 key={todo.id}
-                onLoading={setIsLoading}
-                handleModal={setIsModalOpened}
+                setIsLoading={setIsLoading}
+                setIsModalOpened={setIsModalOpened}
                 setIdToRemove={setIdToRemove}
               />
             ))}
           </ul>
         </span>
       </section>
-      <TodoListFooter
-        filterType={filterType}
-        onFiltering={setFilterType}
-        onLoading={setIsLoading}
-      />
+      {
+        <TodoListFooter
+          filterType={filterType}
+          setFilterType={setFilterType}
+          setIsLoading={setIsLoading}
+        />
+      }
       {isLoading && <Loader />}
       {isModalOpened && (
-        <Modal onLoading={setIsLoading} handleModal={setIsModalOpened} idToRemove={idToRemove} />
+        <Modal
+          setIsLoading={setIsLoading}
+          setIsModalOpened={setIsModalOpened}
+          idToRemove={idToRemove}
+        />
       )}
     </>
   )
 }
 
-export default connect(
-  (state) => ({
-    store: state,
-  }),
-  (dispatch) => ({
-    onToggleAll: (iscompleted) => {
-      dispatch({ type: TODOS_TOGGLE_ALL, options: { iscompleted } })
-    },
-    onInitialize: (todos) => {
-      dispatch({ type: TODOS_INIT, options: todos })
-    },
-  })
-)(TodoList)
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

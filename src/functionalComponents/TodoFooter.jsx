@@ -1,11 +1,37 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { deleteCompletedTodos } from '../api/api'
+import { TODOS_CLEAR_COMPLETED } from '../store/actionTypes'
 
-export const TodoListFooter = ({ filterType }) => {
-  const activeTodos = this.props.store.filter((todo) => !todo.iscompleted)
-  const completedTodos = this.props.store.filter((todo) => todo.iscompleted)
+const mapStateToProps = (state) => {
+  return {
+    todos: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearAction: () => {
+      dispatch({ type: TODOS_CLEAR_COMPLETED })
+    },
+  }
+}
+
+const TodoListFooter = (props) => {
+  const { filterType, setFilterType, setIsLoading } = props
+  const activeTodos = props.todos.filter((todo) => !todo.iscompleted)
+  const completedTodos = props.todos.filter((todo) => todo.iscompleted)
+
+  const clearCompletedTodos = () => {
+    setIsLoading(true)
+    deleteCompletedTodos().then(() => {
+      props.clearAction()
+      setIsLoading(false)
+    })
+  }
 
   return (
-    this.props.store.length > 0 && (
+    props.todos.length > 0 && (
       <footer className='footer'>
         <span className='todo-count'>{activeTodos.length} items left</span>
         <ul className='filters'>
@@ -13,7 +39,7 @@ export const TodoListFooter = ({ filterType }) => {
             <a
               href='#/'
               className={filterType === 'all' ? 'selected' : ''}
-              onClick={() => this.hanleFilterChange('all')}
+              onClick={() => setFilterType('all')}
             >
               All
             </a>
@@ -22,7 +48,7 @@ export const TodoListFooter = ({ filterType }) => {
             <a
               href='#/active'
               className={filterType === 'active' ? 'selected' : ''}
-              onClick={() => this.hanleFilterChange('active')}
+              onClick={() => setFilterType('active')}
             >
               Active
             </a>
@@ -31,14 +57,14 @@ export const TodoListFooter = ({ filterType }) => {
             <a
               href='#/completed'
               className={filterType === 'completed' ? 'selected' : ''}
-              onClick={() => this.hanleFilterChange('completed')}
+              onClick={() => setFilterType('completed')}
             >
               Completed
             </a>
           </li>
         </ul>
         {completedTodos.length > 0 && (
-          <button className='clear-completed' onClick={this.clearCompleted}>
+          <button className='clear-completed' onClick={clearCompletedTodos}>
             Clear completed
           </button>
         )}
@@ -46,3 +72,5 @@ export const TodoListFooter = ({ filterType }) => {
     )
   )
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListFooter)
