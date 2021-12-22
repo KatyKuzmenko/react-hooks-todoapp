@@ -52,13 +52,13 @@ const TodoList = (props) => {
 
   const activeTodos = props.todos.filter((todo) => !todo.iscompleted)
   const completedTodos = props.todos.filter((todo) => todo.iscompleted)
-
   const currentTodos = {
     all: props.todos,
     active: activeTodos,
     completed: completedTodos,
   }
   const visibleTodos = currentTodos[filterType]
+
   return (
     <>
       <section className={props.todos.length > 0 ? 'main' : 'main invisible'}>
