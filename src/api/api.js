@@ -1,13 +1,26 @@
 const BASE_URL = 'http://localhost:3001'
 
-const request = (url, options) => {
-  return fetch(`${BASE_URL}${url}`, options).then((response) => {
+const request = (url, method, options) => {
+  return fetch(`${BASE_URL}${url}`, method, options).then((response) => {
     if (!response.ok) {
       return `${response.status} - ${response.statusText}`
     }
 
     return response.json()
   })
+}
+
+const callApi = async (url, params) => {
+  const { method = 'GET', ...options } = params
+  try {
+    const response = await request({ url, method, options })
+    return { success: true, data: response.data }
+  } catch (error) {
+    return {
+      success: false,
+      data: error.response.data || 'Something went wrong...',
+    }
+  }
 }
 
 const remove = (url) => {

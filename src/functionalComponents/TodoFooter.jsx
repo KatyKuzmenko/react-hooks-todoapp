@@ -1,37 +1,32 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { deleteCompletedTodos } from '../api/api'
 import { TODOS_CLEAR_COMPLETED } from '../store/actionTypes'
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state,
-  }
-}
+const TodoListFooter = ({
+  filterType,
+  setFilterType,
+  setIsLoading,
+  clearCompletedTasks,
+  todos,
+}) => {
+  const activeTodos = useMemo(() => {
+    return todos.filter((todo) => !todo.iscompleted)
+  }, [todos])
+  const completedTodos = useMemo(() => {
+    return todos.filter((todo) => todo.iscompleted)
+  }, [todos])
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    clearAction: () => {
-      dispatch({ type: TODOS_CLEAR_COMPLETED })
-    },
-  }
-}
-
-const TodoListFooter = (props) => {
-  const { filterType, setFilterType, setIsLoading } = props
-  const activeTodos = props.todos.filter((todo) => !todo.iscompleted)
-  const completedTodos = props.todos.filter((todo) => todo.iscompleted)
-
-  const clearCompletedTodos = () => {
+  const clearCompletedTodos = useCallback(() => {
     setIsLoading(true)
     deleteCompletedTodos().then(() => {
-      props.clearAction()
+      clearCompletedTasks()
       setIsLoading(false)
     })
-  }
+  }, [todos])
 
   return (
-    props.todos.length > 0 && (
+    todos.length > 0 && (
       <footer className='footer'>
         <span className='todo-count'>{activeTodos.length} items left</span>
         <ul className='filters'>
@@ -71,6 +66,20 @@ const TodoListFooter = (props) => {
       </footer>
     )
   )
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearCompletedTasks: () => {
+      dispatch({ type: TODOS_CLEAR_COMPLETED })
+    },
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoListFooter)

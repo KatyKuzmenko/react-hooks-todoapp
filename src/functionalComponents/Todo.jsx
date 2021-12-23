@@ -1,72 +1,63 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { updateTodo } from '../api/api'
 import { TODO_EDIT } from '../store/actionTypes'
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleTodoAction: (todo) => {
-      dispatch({ type: TODO_EDIT, options: todo })
-    },
-    changeTitleAction: (todo) => {
-      dispatch({ type: TODO_EDIT, options: todo })
-    },
-  }
-}
-
-const Todo = (props) => {
+const Todo = ({ todo, setIsLoading, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }) => {
   const [isEditing, setIsEditing] = useState(false)
-  const { todo, setIsLoading, setIsModalOpened, setIdToRemove } = props
 
-  const toggleTodo = () => {
+  const toggleTodo = useCallback(() => {
     setIsLoading(true)
     updateTodo({ ...todo, iscompleted: !todo.iscompleted })
       .then((task) => {
-        props.toggleTodoAction(task)
+        toggleTask(task)
         setIsLoading(false)
       })
       .catch((err) => console.warn(err))
-  }
+  }, [todo])
 
-  const setNewTitle = (title) => {
-    setIsLoading(true)
-    updateTodo({ ...todo, title }).then((todo) => {
-      props.changeTitleAction(todo)
-      setIsLoading(false)
-    })
-    setIsEditing(false)
-  }
+  const setNewTitle = useCallback(
+    (title) => {
+      setIsLoading(true)
+      updateTodo({ ...todo, title }).then((todo) => {
+        changeTitle(todo)
+        setIsLoading(false)
+      })
+      setIsEditing(false)
+    },
+    [todo]
+  )
 
-  const editTitle = () => {
+  const editTitle = useCallback(() => {
     setIsEditing(true)
-  }
+  }, [isEditing])
 
-  const setTitleOnBlur = (event) => {
-    if (!event.target.value.trim()) {
-      return
-    }
+  const setTitleOnBlur = useCallback(
+    (event) => {
+      if (!event.target.value.trim()) {
+        return
+      }
 
-    setNewTitle(event.target.value.trim())
-  }
+      setNewTitle(event.target.value.trim())
+    },
+    [todo]
+  )
 
-  const setTitleOnEnter = (event) => {
-    if (!event.target.value.trim() || event.key !== 'Enter') {
-      return
-    }
+  const setTitleOnEnter = useCallback(
+    (event) => {
+      if (!event.target.value.trim() || event.key !== 'Enter') {
+        return
+      }
 
-    setNewTitle(event.target.value.trim())
-  }
+      setNewTitle(event.target.value.trim())
+    },
+    [todo]
+  )
 
-  const openModalWindow = () => {
+  const openModalWindow = useCallback(() => {
     setIdToRemove(todo.id)
     setIsModalOpened(true)
-  }
+  }, [todo])
 
   return (
     <li className={todo.iscompleted ? 'todo-list__item completed' : 'todo-list__item'}>
@@ -98,6 +89,23 @@ const Todo = (props) => {
       )}
     </li>
   )
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleTask: (todo) => {
+      dispatch({ type: TODO_EDIT, options: todo })
+    },
+    changeTitle: (todo) => {
+      dispatch({ type: TODO_EDIT, options: todo })
+    },
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo)

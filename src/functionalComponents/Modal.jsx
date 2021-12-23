@@ -1,30 +1,16 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import { deleteTodo } from '../api/api'
 import { TODO_DELETE } from '../store/actionTypes'
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteTodoAction: (id) => {
-      dispatch({ type: TODO_DELETE, options: { id } })
-    },
-  }
-}
-
 const Modal = (props) => {
   const { idToRemove, setIsModalOpened, setIsLoading } = props
 
-  const closeModalWindow = () => {
+  const closeModalWindow = useCallback(() => {
     setIsModalOpened(false)
-  }
+  }, [])
 
-  const deleteTodoAndCloseModal = () => {
+  const deleteTodoAndCloseModal = useCallback(() => {
     setIsLoading(true)
     deleteTodo(idToRemove)
       .then(() => {
@@ -33,7 +19,7 @@ const Modal = (props) => {
         setIsModalOpened(false)
       })
       .catch((err) => console.warn(err))
-  }
+  }, [idToRemove])
 
   return (
     <div className='modal modal--active'>
@@ -51,6 +37,20 @@ const Modal = (props) => {
       </div>
     </div>
   )
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteTodoAction: (id) => {
+      dispatch({ type: TODO_DELETE, options: { id } })
+    },
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal)

@@ -1,17 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { App } from './App'
+import { TodoApp } from './TodoApp'
 import { createStore, applyMiddleware } from 'redux'
 import todosReducer from './store/reducer'
 import { Provider } from 'react-redux'
-import logger from 'redux-logger'
+import createSagaMiddleware from '@redux-saga/core'
 
-export const store = createStore(todosReducer, applyMiddleware(logger))
+export const sagaMiddleware = createSagaMiddleware()
+export const store = createStore(todosReducer, applyMiddleware(sagaMiddleware))
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <TodoApp />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
