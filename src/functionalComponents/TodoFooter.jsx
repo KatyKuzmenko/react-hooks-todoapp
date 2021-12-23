@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { deleteCompletedTodos } from '../api/api'
-import { TODOS_CLEAR_COMPLETED } from '../store/actionTypes'
+import { CLEAR_COMPLETED_REQUEST } from '../store/actionTypes'
 
 const TodoListFooter = ({
   filterType,
@@ -18,11 +17,7 @@ const TodoListFooter = ({
   }, [todos])
 
   const clearCompletedTodos = useCallback(() => {
-    setIsLoading(true)
-    deleteCompletedTodos().then(() => {
-      clearCompletedTasks()
-      setIsLoading(false)
-    })
+    clearCompletedTasks()
   }, [todos])
 
   return (
@@ -77,7 +72,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     clearCompletedTasks: () => {
-      dispatch({ type: TODOS_CLEAR_COMPLETED })
+      dispatch({ type: CLEAR_COMPLETED_REQUEST })
     },
   }
 }

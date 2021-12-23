@@ -1,38 +1,38 @@
 import {
-  TODOS_INIT,
-  TODO_ADD,
-  TODO_DELETE,
-  TODOS_CLEAR_COMPLETED,
-  TODOS_TOGGLE_ALL,
-  TODO_EDIT,
+  FETCH_TODOS_SUCCESS,
+  DELETE_TODO_SUCCESS,
+  TODO_ADD_SUCCESS,
+  TODO_EDIT_SUCCESS,
+  TOGGLE_ALL_TODOS_SUCCESS,
+  CLEAR_COMPLETED_SUCCESS,
 } from './actionTypes'
 
 export default function todosReducer(state = [], action) {
   switch (action.type) {
-    case TODOS_INIT:
-      return [...action.options]
+    case FETCH_TODOS_SUCCESS:
+      return [...action.payload]
 
-    case TODO_ADD:
-      return [...state, action.options]
+    case TODO_ADD_SUCCESS:
+      return [...state, action.payload]
 
-    case TODO_DELETE:
-      return state.filter((todo) => action.options.id !== todo.id)
+    case DELETE_TODO_SUCCESS:
+      return state.filter((todo) => action.payload.id !== todo.id)
 
-    case TODO_EDIT:
+    case TODO_EDIT_SUCCESS:
       return state.map((task) => {
-        if (task.id === action.options.id) {
-          return { ...action.options }
+        if (task.id === action.payload.id) {
+          return { ...action.payload }
         }
 
         return task
       })
 
-    case TODOS_TOGGLE_ALL:
+    case TOGGLE_ALL_TODOS_SUCCESS:
       return state.map((todo) => {
-        return { ...todo, iscompleted: action.options.iscompleted }
+        return { ...todo, iscompleted: action.payload.iscompleted }
       })
 
-    case TODOS_CLEAR_COMPLETED:
+    case CLEAR_COMPLETED_SUCCESS:
       return state.filter((todo) => todo.iscompleted === false)
 
     default:

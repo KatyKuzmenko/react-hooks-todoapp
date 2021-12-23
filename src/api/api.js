@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:3001'
 
-const request = (url, method, options) => {
-  return fetch(`${BASE_URL}${url}`, method, options).then((response) => {
+const request = (url, options) => {
+  return fetch(`${BASE_URL}${url}`, options).then((response) => {
     if (!response.ok) {
       return `${response.status} - ${response.statusText}`
     }
@@ -9,18 +9,20 @@ const request = (url, method, options) => {
     return response.json()
   })
 }
+export async function callApi(url, options) {
+  const response = await fetch(`${BASE_URL}${url}`, options)
+  return response.json()
+}
 
-const callApi = async (url, params) => {
-  const { method = 'GET', ...options } = params
-  try {
-    const response = await request({ url, method, options })
-    return { success: true, data: response.data }
-  } catch (error) {
-    return {
-      success: false,
-      data: error.response.data || 'Something went wrong...',
-    }
-  }
+export async function fetchTodos() {
+  return callApi('/todos')
+}
+
+export async function deleteTodo(todoId) {
+  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
+    method: 'DELETE'
+  })
+  return await response.json()
 }
 
 const remove = (url) => {
@@ -61,9 +63,9 @@ export const toggleAllTodos = (iscompleted) => {
   return patch('/todos', { iscompleted })
 }
 
-export const deleteTodo = (todoId) => {
-  return remove(`/todos/${todoId}`)
-}
+// export const deleteTodo = (todoId) => {
+//   return remove(`/todos/${todoId}`)
+// }
 
 export const deleteCompletedTodos = () => {
   return remove('/todos/')

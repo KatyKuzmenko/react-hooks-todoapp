@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
-import { getTodos, toggleAllTodos } from '../api/api'
-import { TODOS_INIT, TODOS_TOGGLE_ALL } from '../store/actionTypes'
+import { FETCH_TODOS_REQUEST, TOGGLE_ALL_TODOS_REQUEST } from '../store/actionTypes'
 import { Loader } from './Loader'
 import Modal from './Modal'
 import Todo from './Todo'
@@ -14,24 +13,12 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
   const [idToRemove, setIdToRemove] = useState(null)
 
   useEffect(() => {
-    setIsLoading(true)
-    getTodos()
-      .then((todosFromServer) => {
-        initTodosFromServer(todosFromServer)
-        setIsLoading(false)
-      })
-      .catch((err) => console.warn(err))
+    initTodosFromServer()
   }, [])
 
   const toggleAllTasks = useCallback(
     (event) => {
-      setIsLoading(true)
-      toggleAllTodos(event.target.checked)
-        .then((todos) => {
-          toggleAll(todos)
-          setIsLoading(false)
-        })
-        .catch((err) => console.warn(err))
+      toggleAll(event.target.checked)
     },
     [todos]
   )
@@ -51,7 +38,7 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
   }, [todos])
   const visibleTodos = useMemo(() => {
     return currentTodos[filterType]
-  }, [currentTodos, filterType])
+  }, [todos])
 
   return (
     <>
@@ -106,10 +93,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleAll: (iscompleted) => {
-      dispatch({ type: TODOS_TOGGLE_ALL, options: { iscompleted } })
+      dispatch({ type: TOGGLE_ALL_TODOS_REQUEST, payload: { iscompleted } })
     },
-    initTodosFromServer: (todos) => {
-      dispatch({ type: TODOS_INIT, options: todos })
+    initTodosFromServer: () => {
+      dispatch({ type: FETCH_TODOS_REQUEST })
     },
   }
 }
