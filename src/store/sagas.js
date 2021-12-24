@@ -11,8 +11,9 @@ import {
   CLEAR_COMPLETED_REQUEST,
   TODO_ADD_SUCCESS,
   TODO_ADD_REQUEST,
-  TODO_EDIT_REQUEST,
+  TODO_EDIT_TITLE_REQUEST,
   TODO_EDIT_SUCCESS,
+  TODO_TOGGLE_REQUEST,
 } from './actionTypes'
 
 function* fetchTodos() {
@@ -57,7 +58,7 @@ function* clearCompleted() {
   }
 }
 
-function* addTodo(options) {
+function* addTodo({options}) {
   try {
     const payload = yield call(callApi, '/todos', {
       method: 'POST',
@@ -72,9 +73,9 @@ function* addTodo(options) {
   }
 }
 
-function* toggleTodo({options}) {
+function* editTodo({options}) {
   try {
-    const payload = yield call(callApi, `/todos/${options.todo.id}`, {
+    const payload = yield call(callApi, `/todos/${options.id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -93,5 +94,6 @@ export function* todosWatcher() {
   yield takeEvery(DELETE_TODO_REQUEST, deleteTodo)
   yield takeEvery(CLEAR_COMPLETED_REQUEST, clearCompleted)
   yield takeEvery(TODO_ADD_REQUEST, addTodo)
-  yield takeEvery(TODO_EDIT_REQUEST, toggleTodo)
+  yield takeEvery(TODO_TOGGLE_REQUEST, editTodo)
+  yield takeEvery(TODO_EDIT_TITLE_REQUEST, editTodo)
 }

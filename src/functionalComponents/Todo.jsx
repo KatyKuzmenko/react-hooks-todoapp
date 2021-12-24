@@ -1,22 +1,19 @@
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import { updateTodo } from '../api/api'
-import { TODO_EDIT_REQUEST } from '../store/actionTypes'
+import {
+  TODO_EDIT_TITLE_REQUEST,
+  TODO_TOGGLE_REQUEST,
+} from '../store/actionTypes'
 
 const Todo = ({ todo, setIsLoading, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const toggleTodo = useCallback(() => {
-    toggleTask({...todo, iscompleted: !todo.iscompleted})
+    toggleTask({ ...todo, iscompleted: !todo.iscompleted })
   }, [todo])
 
-  const setNewTitle = useCallback(
-    (title) => {
-      setIsLoading(true)
-      updateTodo({ ...todo, title }).then((todo) => {
-        changeTitle(todo)
-        setIsLoading(false)
-      })
+  const setNewTitle = useCallback((title) => {
+      changeTitle({ ...todo, title })
       setIsEditing(false)
     },
     [todo]
@@ -94,10 +91,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleTask: (todo) => {
-      dispatch({ type: TODO_EDIT_REQUEST, options: todo })
+      dispatch({ type: TODO_TOGGLE_REQUEST, options: todo })
     },
     changeTitle: (todo) => {
-      dispatch({ type: TODO_EDIT_REQUEST, options: todo })
+      dispatch({ type: TODO_EDIT_TITLE_REQUEST, options: todo })
     },
   }
 }

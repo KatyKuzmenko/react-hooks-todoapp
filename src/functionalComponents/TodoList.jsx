@@ -38,7 +38,7 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
   }, [todos])
   const visibleTodos = useMemo(() => {
     return currentTodos[filterType]
-  }, [todos])
+  }, [filterType, todos])
 
   return (
     <>
