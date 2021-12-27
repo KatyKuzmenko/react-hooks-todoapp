@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { DELETE_TODO_REQUEST } from '../store/actionTypes'
 
 const Modal = (props) => {
-  const { idToRemove, setIsModalOpened, setIsLoading, deleteTodoRequest } = props
+  const { idToRemove, setIsModalOpened, deleteTodoRequest } = props
 
   const closeModalWindow = useCallback(() => {
     setIsModalOpened(false)
@@ -34,7 +34,8 @@ const Modal = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state,
+    todos: state.todos,
+    loading: state.app
   }
 }
 
@@ -42,7 +43,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteTodoRequest: (id) => {
       dispatch({ type: DELETE_TODO_REQUEST, payload: { id }})
-    },
+    }
   }
 }
 

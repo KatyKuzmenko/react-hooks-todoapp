@@ -5,7 +5,6 @@ import { CLEAR_COMPLETED_REQUEST } from '../store/actionTypes'
 const TodoListFooter = ({
   filterType,
   setFilterType,
-  setIsLoading,
   clearCompletedTasks,
   todos,
 }) => {
@@ -65,7 +64,7 @@ const TodoListFooter = ({
 
 const mapStateToProps = (state) => {
   return {
-    todos: state,
+    todos: state.todos,
   }
 }
 
@@ -73,7 +72,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     clearCompletedTasks: () => {
       dispatch({ type: CLEAR_COMPLETED_REQUEST })
-    },
+    }
   }
 }
 

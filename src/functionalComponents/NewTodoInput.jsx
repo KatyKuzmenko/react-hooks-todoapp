@@ -22,7 +22,7 @@ const NewTodoInput = ({ addTask }) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state,
+    todos: state.todos,
   }
 }
 
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTask: (title) => {
       dispatch({ type: TODO_ADD_REQUEST, options: {title}})
-    },
+    }
   }
 }
 

@@ -6,9 +6,8 @@ import Modal from './Modal'
 import Todo from './Todo'
 import TodoListFooter from './TodoFooter'
 
-const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
+const TodoList = ({ initTodosFromServer, toggleAll, todos, loading, hideLoader }) => {
   const [filterType, setFilterType] = useState('all')
-  const [isLoading, setIsLoading] = useState(false)
   const [isModalOpened, setIsModalOpened] = useState(false)
   const [idToRemove, setIdToRemove] = useState(null)
 
@@ -57,7 +56,6 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
               <Todo
                 todo={todo}
                 key={todo.id}
-                setIsLoading={setIsLoading}
                 setIsModalOpened={setIsModalOpened}
                 setIdToRemove={setIdToRemove}
               />
@@ -69,13 +67,11 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
         <TodoListFooter
           filterType={filterType}
           setFilterType={setFilterType}
-          setIsLoading={setIsLoading}
         />
       }
-      {isLoading && <Loader />}
+      {loading && <Loader />}
       {isModalOpened && (
         <Modal
-          setIsLoading={setIsLoading}
           setIsModalOpened={setIsModalOpened}
           idToRemove={idToRemove}
         />
@@ -86,7 +82,8 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos }) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state,
+    todos: state.todos,
+    loading: state.app.loading
   }
 }
 
@@ -97,7 +94,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     initTodosFromServer: () => {
       dispatch({ type: FETCH_TODOS_REQUEST })
-    },
+    }
   }
 }
 

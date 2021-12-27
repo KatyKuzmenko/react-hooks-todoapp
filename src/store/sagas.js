@@ -14,12 +14,16 @@ import {
   TODO_TOGGLE_REQUEST,
   TODO_EDIT_TITLE_REQUEST,
   TODO_EDIT_SUCCESS,
+  SHOW_LOADER,
+  HIDE_LOADER,
 } from './actionTypes'
 
 function* fetchTodos() {
   try {
+    yield put({ type: SHOW_LOADER })
     const payload = yield call(callApi, '/todos')
     yield put({ type: FETCH_TODOS_SUCCESS, payload })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }
@@ -27,8 +31,10 @@ function* fetchTodos() {
 
 function* deleteTodo({ payload }) {
   try {
+    yield put({ type: SHOW_LOADER })
     yield call(callApi, `/todos/${payload.id}`, { method: 'DELETE' })
     yield put({ type: DELETE_TODO_SUCCESS, payload })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }
@@ -36,6 +42,7 @@ function* deleteTodo({ payload }) {
 
 function* toggleAll({ payload }) {
   try {
+    yield put({ type: SHOW_LOADER })
     yield call(callApi, '/todos', {
       method: 'PATCH',
       headers: {
@@ -44,6 +51,7 @@ function* toggleAll({ payload }) {
       body: JSON.stringify(payload),
     })
     yield put({ type: TOGGLE_ALL_TODOS_SUCCESS, payload })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }
@@ -51,15 +59,18 @@ function* toggleAll({ payload }) {
 
 function* clearCompleted() {
   try {
+    yield put({ type: SHOW_LOADER })
     yield call(callApi, '/todos', { method: 'DELETE' })
     yield put({ type: CLEAR_COMPLETED_SUCCESS })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }
 }
 
-function* addTodo({options}) {
+function* addTodo({ options }) {
   try {
+    yield put({ type: SHOW_LOADER })
     const payload = yield call(callApi, '/todos', {
       method: 'POST',
       headers: {
@@ -68,13 +79,15 @@ function* addTodo({options}) {
       body: JSON.stringify(options),
     })
     yield put({ type: TODO_ADD_SUCCESS, payload })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }
 }
 
-function* editTodo({options}) {
+function* editTodo({ options }) {
   try {
+    yield put({ type: SHOW_LOADER })
     const payload = yield call(callApi, `/todos/${options.id}`, {
       method: 'PATCH',
       headers: {
@@ -83,6 +96,7 @@ function* editTodo({options}) {
       body: JSON.stringify(options),
     })
     yield put({ type: TODO_EDIT_SUCCESS, payload })
+    yield put({ type: HIDE_LOADER })
   } catch (err) {
     console.warn(err)
   }

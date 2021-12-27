@@ -5,7 +5,7 @@ import {
   TODO_TOGGLE_REQUEST,
 } from '../store/actionTypes'
 
-const Todo = ({ todo, setIsLoading, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }) => {
+const Todo = ({ todo, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const toggleTodo = useCallback(() => {
@@ -84,7 +84,7 @@ const Todo = ({ todo, setIsLoading, setIsModalOpened, setIdToRemove, toggleTask,
 
 const mapStateToProps = (state) => {
   return {
-    todos: state,
+    todos: state.todos
   }
 }
 
@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     changeTitle: (todo) => {
       dispatch({ type: TODO_EDIT_TITLE_REQUEST, options: todo })
-    },
+    }
   }
 }
 
