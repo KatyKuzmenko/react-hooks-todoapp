@@ -15,7 +15,12 @@ const NewTodoInput = ({ addTask }) => {
   return (
     <header className='header'>
       <h1>todos</h1>
-      <input className='new-todo' placeholder='What needs to be done?' defaultValue={''} onKeyDown={addTodo} />
+      <input
+        className='new-todo'
+        placeholder='What needs to be done?'
+        defaultValue={''}
+        onKeyDown={addTodo}
+      />
     </header>
   )
 }
@@ -29,8 +34,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addTask: (title) => {
-      dispatch({ type: TODO_ADD_REQUEST, options: {title}})
-    }
+      dispatch({ type: TODO_ADD_REQUEST, options: { title } })
+    },
   }
 }
 

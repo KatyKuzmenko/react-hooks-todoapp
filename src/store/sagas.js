@@ -45,10 +45,7 @@ function* toggleAll({ payload }) {
     yield put({ type: SHOW_LOADER })
     yield call(callApi, '/todos', {
       method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(payload),
+      body: payload,
     })
     yield put({ type: TOGGLE_ALL_TODOS_SUCCESS, payload })
     yield put({ type: HIDE_LOADER })
@@ -73,10 +70,7 @@ function* addTodo({ options }) {
     yield put({ type: SHOW_LOADER })
     const payload = yield call(callApi, '/todos', {
       method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(options),
+      body: options,
     })
     yield put({ type: TODO_ADD_SUCCESS, payload })
     yield put({ type: HIDE_LOADER })
@@ -90,10 +84,7 @@ function* editTodo({ options }) {
     yield put({ type: SHOW_LOADER })
     const payload = yield call(callApi, `/todos/${options.id}`, {
       method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(options),
+      body: options,
     })
     yield put({ type: TODO_EDIT_SUCCESS, payload })
     yield put({ type: HIDE_LOADER })

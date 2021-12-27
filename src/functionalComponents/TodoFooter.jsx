@@ -2,12 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { CLEAR_COMPLETED_REQUEST } from '../store/actionTypes'
 
-const TodoListFooter = ({
-  filterType,
-  setFilterType,
-  clearCompletedTasks,
-  todos,
-}) => {
+const TodoListFooter = ({ filterType, setFilterType, clearCompletedTasks, todos }) => {
   const activeTodos = useMemo(() => {
     return todos.filter((todo) => !todo.iscompleted)
   }, [todos])
@@ -72,7 +67,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     clearCompletedTasks: () => {
       dispatch({ type: CLEAR_COMPLETED_REQUEST })
-    }
+    },
   }
 }
 

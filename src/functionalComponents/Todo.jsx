@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import {
-  TODO_EDIT_TITLE_REQUEST,
-  TODO_TOGGLE_REQUEST,
-} from '../store/actionTypes'
+import { TODO_EDIT_TITLE_REQUEST, TODO_TOGGLE_REQUEST } from '../store/actionTypes'
 
 const Todo = ({ todo, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -12,7 +9,8 @@ const Todo = ({ todo, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }
     toggleTask({ ...todo, iscompleted: !todo.iscompleted })
   }, [todo])
 
-  const setNewTitle = useCallback((title) => {
+  const setNewTitle = useCallback(
+    (title) => {
       changeTitle({ ...todo, title })
       setIsEditing(false)
     },
@@ -84,7 +82,7 @@ const Todo = ({ todo, setIsModalOpened, setIdToRemove, toggleTask, changeTitle }
 
 const mapStateToProps = (state) => {
   return {
-    todos: state.todos
+    todos: state.todos,
   }
 }
 
@@ -95,7 +93,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     changeTitle: (todo) => {
       dispatch({ type: TODO_EDIT_TITLE_REQUEST, options: todo })
-    }
+    },
   }
 }
 

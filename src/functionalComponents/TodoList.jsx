@@ -63,19 +63,9 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos, loading, hideLoader }
           </ul>
         </span>
       </section>
-      {
-        <TodoListFooter
-          filterType={filterType}
-          setFilterType={setFilterType}
-        />
-      }
+      {<TodoListFooter filterType={filterType} setFilterType={setFilterType} />}
       {loading && <Loader />}
-      {isModalOpened && (
-        <Modal
-          setIsModalOpened={setIsModalOpened}
-          idToRemove={idToRemove}
-        />
-      )}
+      {isModalOpened && <Modal setIsModalOpened={setIsModalOpened} idToRemove={idToRemove} />}
     </>
   )
 }
@@ -83,7 +73,7 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos, loading, hideLoader }
 const mapStateToProps = (state) => {
   return {
     todos: state.todos,
-    loading: state.app.loading
+    loading: state.app.loading,
   }
 }
 
@@ -94,7 +84,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     initTodosFromServer: () => {
       dispatch({ type: FETCH_TODOS_REQUEST })
-    }
+    },
   }
 }
 

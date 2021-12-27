@@ -35,15 +35,14 @@ const Modal = (props) => {
 const mapStateToProps = (state) => {
   return {
     todos: state.todos,
-    loading: state.app
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteTodoRequest: (id) => {
-      dispatch({ type: DELETE_TODO_REQUEST, payload: { id }})
-    }
+      dispatch({ type: DELETE_TODO_REQUEST, payload: { id } })
+    },
   }
 }
 
