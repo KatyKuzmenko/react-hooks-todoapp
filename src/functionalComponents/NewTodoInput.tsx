@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { TodosActionsTypes } from '../types/actionTypes'
 import { State } from '../types/StatesTypes'
 
-
 type Props = {
   addTask: (title: string) => void
 }
