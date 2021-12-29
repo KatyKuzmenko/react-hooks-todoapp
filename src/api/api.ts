@@ -1,9 +1,8 @@
+import { OptionsType } from "../types/apiTypes"
+
 const BASE_URL: string = 'http://localhost:3001'
-type OptionsType = {
-  method: string
-  body?: any
-}
-export async function callApi(url: string, options: OptionsType = { method: 'GET'}): Promise<Response | string> {
+
+export async function callApi(url: string, options: OptionsType = { method: 'GET'}): Promise<Response> {
   const { method, body } = options
   const response = await fetch(`${BASE_URL}${url}`, {
     method,
