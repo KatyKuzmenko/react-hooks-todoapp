@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
-import { TodosActionsTypes, ToggleAllPayload } from '../types/actionTypes'
+import { TodosActionsTypes } from '../types/actionTypes'
 import { State } from '../types/StatesTypes'
 import { CurrentTodos, FilterOptions, Todo } from '../types/todosTypes'
 
@@ -105,7 +105,7 @@ const mapStateToProps = (state: State) => {
 }
 
 const mapDispatchToProps = (
-  dispatch: (action: { type: string; payload?: ToggleAllPayload }) => void
+  dispatch: (action: { type: string; payload?: {iscompleted: boolean} }) => void
 ) => {
   return {
     toggleAll: (iscompleted: boolean) => {

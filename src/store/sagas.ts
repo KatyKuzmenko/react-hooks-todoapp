@@ -4,9 +4,9 @@ import { AddTodoPayload, DeleteTodoPayload, EditTodoPayload, TodosActionsTypes, 
 import { Todo } from '../types/todosTypes'
 
 
-function* fetchTodos(): Generator {
+function* fetchTodos() {
   try {
-    const payload = yield call(callApi, '/todos')
+    const payload: Todo[] = yield call(callApi, '/todos')
     yield put({ type: TodosActionsTypes.FETCH_TODOS_SUCCESS, payload })
   } catch (err) {
     console.warn(err)
