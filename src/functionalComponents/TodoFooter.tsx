@@ -1,24 +1,22 @@
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { TodosActionsTypes } from '../types/actionTypes'
+import { State } from '../types/StatesTypes'
+import { Todo } from '../types/todosTypes'
 
-import { CLEAR_COMPLETED_REQUEST } from '../store/actionTypes'
-import { State, Todo } from '../types/types'
+
 type Props = {
   filterType: string
   setFilterType: (type: string) => void
   clearCompletedTasks: () => void
-  todos: Todo[] | []
+  todos: Todo[]
 }
 
-const TodoListFooter = ({
-  filterType,
-  setFilterType,
-  clearCompletedTasks,
-  todos,
-}: Props) => {
+const TodoListFooter = ({ filterType, setFilterType, clearCompletedTasks, todos }: Props) => {
   const activeTodos = useMemo(() => {
     return todos.filter((todo) => !todo.iscompleted)
   }, [todos])
+
   const completedTodos = useMemo(() => {
     return todos.filter((todo) => todo.iscompleted)
   }, [todos])
@@ -68,6 +66,7 @@ const TodoListFooter = ({
       </footer>
     )
   }
+
   return null
 }
 
@@ -78,10 +77,10 @@ const mapStateToProps = (state: State) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: {type: string}) => void) => {
+const mapDispatchToProps = (dispatch: (action: { type: string }) => void) => {
   return {
     clearCompletedTasks: () => {
-      dispatch({ type: CLEAR_COMPLETED_REQUEST })
+      dispatch({ type: TodosActionsTypes.CLEAR_COMPLETED_REQUEST })
     },
   }
 }

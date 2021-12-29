@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
-
-import { DELETE_TODO_REQUEST } from '../store/actionTypes'
-import { State } from '../types/types'
+import { TodosActionsTypes } from '../types/actionTypes'
+import { State } from '../types/StatesTypes'
 
 type Props = {
   isModalOpened: boolean
@@ -11,12 +10,7 @@ type Props = {
   deleteTodoRequest: (id: number | null) => void
 }
 
-const Modal = ({
-  isModalOpened,
-  idToRemove,
-  onModalClose,
-  deleteTodoRequest,
-}: Props) => {
+const Modal = ({ isModalOpened, idToRemove, onModalClose, deleteTodoRequest }: Props) => {
   const closeModalWindow = useCallback(() => {
     onModalClose()
   }, [])
@@ -55,10 +49,12 @@ const mapStateToProps = (state: State) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: {type: string; payload: {id: number | null}}) => void) => {
+const mapDispatchToProps = (
+  dispatch: (action: { type: string; payload: { id: number | null } }) => void
+) => {
   return {
     deleteTodoRequest: (id: number | null) => {
-      dispatch({ type: DELETE_TODO_REQUEST, payload: { id } })
+      dispatch({ type: TodosActionsTypes.DELETE_TODO_REQUEST, payload: { id } })
     },
   }
 }

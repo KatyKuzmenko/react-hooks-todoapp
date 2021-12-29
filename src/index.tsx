@@ -9,6 +9,7 @@ import { todosWatcher } from './store/sagas'
 
 export const sagaMiddleware = createSagaMiddleware()
 export const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+
 sagaMiddleware.run(todosWatcher)
 
 ReactDOM.render(

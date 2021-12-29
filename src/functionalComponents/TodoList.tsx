@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
+import { TodosActionsTypes, ToggleAllPayload } from '../types/actionTypes'
+import { State } from '../types/StatesTypes'
+import { CurrentTodos, FilterOptions, Todo } from '../types/todosTypes'
 
 import Loader from './Loader'
 import Modal from './Modal'
 import TodoItem from './Todo'
 import TodoListFooter from './TodoFooter'
-import { FETCH_TODOS_REQUEST, TOGGLE_ALL_TODOS_REQUEST } from '../store/actionTypes'
-import { CurrentTodos, State, Todo, ToggleAllPayload } from '../types/types'
-import { filterOption } from '../utils/constants'
 
 type Props = {
   initTodosFromServer: () => void
@@ -17,7 +17,7 @@ type Props = {
 }
 
 const TodoList = ({ initTodosFromServer, toggleAll, todos, loading }: Props) => {
-  const [filterType, setFilterType] = useState<string>(filterOption.ALL)
+  const [filterType, setFilterType] = useState<string>(FilterOptions.ALL)
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false)
   const [idToRemove, setIdToRemove] = useState<number | null>(null)
 
@@ -47,12 +47,12 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos, loading }: Props) => 
   const completedTodos: Todo[] = useMemo(() => {
     return todos.filter((todo) => todo.iscompleted)
   }, [todos])
-  
+
   const currentTodos: CurrentTodos = useMemo(() => {
     return {
-      [filterOption.ALL]: todos,
-      [filterOption.ACTIVE]: activeTodos,
-      [filterOption.COMPLETED]: completedTodos,
+      [FilterOptions.ALL]: todos,
+      [FilterOptions.ACTIVE]: activeTodos,
+      [FilterOptions.COMPLETED]: completedTodos,
     }
   }, [todos])
 
@@ -86,7 +86,13 @@ const TodoList = ({ initTodosFromServer, toggleAll, todos, loading }: Props) => 
       </section>
       {<TodoListFooter filterType={filterType} setFilterType={setFilterType} />}
       {loading && <Loader />}
-      {<Modal isModalOpened={isModalOpened} onModalClose={handleModalClose} idToRemove={idToRemove} />}
+      {
+        <Modal
+          isModalOpened={isModalOpened}
+          onModalClose={handleModalClose}
+          idToRemove={idToRemove}
+        />
+      }
     </>
   )
 }
@@ -98,13 +104,15 @@ const mapStateToProps = (state: State) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: {type: string; payload?: ToggleAllPayload}) => void) => {
+const mapDispatchToProps = (
+  dispatch: (action: { type: string; payload?: ToggleAllPayload }) => void
+) => {
   return {
     toggleAll: (iscompleted: boolean) => {
-      dispatch({ type: TOGGLE_ALL_TODOS_REQUEST, payload: { iscompleted } })
+      dispatch({ type: TodosActionsTypes.TOGGLE_ALL_TODOS_REQUEST, payload: { iscompleted } })
     },
     initTodosFromServer: () => {
-      dispatch({ type: FETCH_TODOS_REQUEST })
+      dispatch({ type: TodosActionsTypes.FETCH_TODOS_REQUEST })
     },
   }
 }

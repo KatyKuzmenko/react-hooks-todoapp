@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
+import { TodosActionsTypes } from '../types/actionTypes'
+import { State } from '../types/StatesTypes'
 
-import { TODO_ADD_REQUEST } from '../store/actionTypes'
-import { State } from '../types/types'
 
 type Props = {
   addTask: (title: string) => void
@@ -41,7 +41,7 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch: (action: {type: string; options: {title:string}}) => void) => {
   return {
     addTask: (title: string) => {
-      dispatch({ type: TODO_ADD_REQUEST, options: { title } })
+      dispatch({ type: TodosActionsTypes.TODO_ADD_REQUEST, options: { title } })
     },
   }
 }

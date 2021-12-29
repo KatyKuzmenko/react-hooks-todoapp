@@ -1,59 +1,18 @@
-import { DeleteTodoPayload, Todo, TodosState, ToggleAllPayload } from '../types/types'
-import {
-  FETCH_TODOS_SUCCESS,
-  DELETE_TODO_SUCCESS,
-  TODO_ADD_SUCCESS,
-  TODO_EDIT_SUCCESS,
-  TOGGLE_ALL_TODOS_SUCCESS,
-  CLEAR_COMPLETED_SUCCESS,
-} from './actionTypes'
+import { TodosActions, TodosActionsTypes } from "../types/actionTypes"
+import { TodosState } from "../types/StatesTypes"
 
-type FetchActionType = {
-  type: typeof FETCH_TODOS_SUCCESS
-  payload: FetchActionType
-}
-
-type TodoAddActionType = {
-  type: typeof TODO_ADD_SUCCESS
-  payload: TodoAddActionType
-}
-
-type DeleteTodoActionType = {
-  type: typeof DELETE_TODO_SUCCESS
-  payload: {
-    id: DeleteTodoPayload
-  }
-}
-
-type TodoEditActionType = {
-  type: typeof TODO_EDIT_SUCCESS
-  payload: TodoEditActionType
-}
-
-type ToggleAllActionType = {
-  type: typeof TOGGLE_ALL_TODOS_SUCCESS
-  payload: ToggleAllPayload
-}
-
-type ClearCompletedActionType = {
-  type: typeof CLEAR_COMPLETED_SUCCESS
-  payload: null 
-}
-
-type Action = FetchActionType | TodoAddActionType | DeleteTodoActionType | TodoEditActionType | ToggleAllActionType | ClearCompletedActionType
-
-export default function todosReducer(state: TodosState = [], action: Action): TodosState {
+export default function todosReducer(state: TodosState = [], action: TodosActions): TodosState {
   switch (action.type) {
-    case FETCH_TODOS_SUCCESS:
+    case TodosActionsTypes.FETCH_TODOS_SUCCESS:
       return [...action.payload]
 
-    case TODO_ADD_SUCCESS:
-      return [...state, action.payload.]
+    case TodosActionsTypes.TODO_ADD_SUCCESS:
+      return [...state, action.payload]
 
-    case DELETE_TODO_SUCCESS:
+    case TodosActionsTypes.DELETE_TODO_SUCCESS:
       return state.filter((todo) => action.payload.id !== todo.id)
 
-    case TODO_EDIT_SUCCESS:
+    case TodosActionsTypes.TODO_EDIT_SUCCESS:
       return state.map((task) => {
         if (task.id === action.payload.id) {
           return { ...action.payload }
@@ -62,12 +21,12 @@ export default function todosReducer(state: TodosState = [], action: Action): To
         return task
       })
 
-    case TOGGLE_ALL_TODOS_SUCCESS:
+    case TodosActionsTypes.TOGGLE_ALL_TODOS_SUCCESS:
       return state.map((todo) => {
         return { ...todo, iscompleted: action.payload.iscompleted }
       })
 
-    case CLEAR_COMPLETED_SUCCESS:
+    case TodosActionsTypes.CLEAR_COMPLETED_SUCCESS:
       return state.filter((todo) => todo.iscompleted === false)
 
     default:

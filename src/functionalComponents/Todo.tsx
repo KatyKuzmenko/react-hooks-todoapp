@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
+import { TodosActionsTypes } from '../types/actionTypes'
+import { State } from '../types/StatesTypes'
+import { Todo } from '../types/todosTypes'
 
-import { TODO_EDIT_TITLE_REQUEST, TODO_TOGGLE_REQUEST } from '../store/actionTypes'
-import { State, Todo } from '../types/types'
 
 type Props = {
   todo: Todo
@@ -106,10 +107,10 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch: (action: {type: string; options: Todo}) => void) => {
   return {
     toggleTask: (todo: Todo) => {
-      dispatch({ type: TODO_TOGGLE_REQUEST, options: todo })
+      dispatch({ type: TodosActionsTypes.TODO_TOGGLE_REQUEST, options: todo })
     },
     changeTitle: (todo: Todo) => {
-      dispatch({ type: TODO_EDIT_TITLE_REQUEST, options: todo })
+      dispatch({ type: TodosActionsTypes.TODO_EDIT_TITLE_REQUEST, options: todo })
     },
   }
 }
