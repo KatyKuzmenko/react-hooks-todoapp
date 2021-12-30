@@ -1,6 +1,6 @@
 import { Todo } from './todosTypes'
 
-export type LoadingAction = {
+export interface LoadingAction {
   type: string
 }
 
@@ -20,7 +20,12 @@ export type EditTodoPayload = {
   todo: Todo
 }
 
+export type GetTokenActionType = {
+  token: string
+}
+
 export enum TodosActionsTypes {
+  GET_TOKEN_SUCCESS = 'token/get-success',
   FETCH_TODOS_SUCCESS = 'todos/request-success',
   TOGGLE_ALL_TODOS_SUCCESS = 'todos/toggle-all-success',
   TODO_ADD_SUCCESS = 'todo/add-success',
@@ -34,12 +39,14 @@ export enum TodosActionsTypes {
   TODO_TOGGLE_REQUEST = 'todo/toggle/db',
   TODO_EDIT_TITLE_REQUEST = 'todo/edit/db',
   CLEAR_COMPLETED_REQUEST = 'todos/clear-completed/db',
+  GET_TOKEN_REQUEST = 'token/get-request',
   FETCH_TODOS_FAILED = 'todos/request-failed',
   TOGGLE_ALL_TODOS_FAILED = 'todos/toggle-all-failed',
   TODO_ADD_FAILED = 'todo/add-failed',
   TODO_EDIT_FAILED = 'todo/edit-failed',
   CLEAR_COMPLETED_FAILED = 'todos/clear-completed-failed',
   DELETE_TODO_FAILED = 'todo/delete-failed',
+  GET_TOKEN_FAILED = 'token/get-failed',
 }
 
 export interface FetchTodosActionType {

@@ -12,16 +12,18 @@ import TodoListFooter from './TodoFooter'
 type Props = {
   initTodosFromServer: () => void
   toggleAll: (iscompleted: boolean) => void
+  receiveToken: (id: number) => any
   todos: Todo[]
   loading: boolean
 }
 
-const TodoList = ({ initTodosFromServer, toggleAll, todos, loading }: Props) => {
+const TodoList = ({ initTodosFromServer, toggleAll, receiveToken, todos, loading }: Props) => {
   const [filterType, setFilterType] = useState<string>(FilterOptions.ALL)
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false)
   const [idToRemove, setIdToRemove] = useState<number | null>(null)
 
   useEffect(() => {
+    receiveToken(1)
     initTodosFromServer()
   }, [])
 
@@ -105,9 +107,12 @@ const mapStateToProps = (state: State) => {
 }
 
 const mapDispatchToProps = (
-  dispatch: (action: { type: string; payload?: {iscompleted: boolean} }) => void
+  dispatch: (action: { type: string; payload?: {iscompleted: boolean}; options?: {id: number}}) => void
 ) => {
   return {
+    receiveToken: (id: number) => {
+      dispatch({ type: TodosActionsTypes.GET_TOKEN_REQUEST, options: { id }})
+    },
     toggleAll: (iscompleted: boolean) => {
       dispatch({ type: TodosActionsTypes.TOGGLE_ALL_TODOS_REQUEST, payload: { iscompleted } })
     },

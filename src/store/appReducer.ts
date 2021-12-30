@@ -17,6 +17,7 @@ export const appReducer = (
     case TodosActionsTypes.CLEAR_COMPLETED_REQUEST:
     case TodosActionsTypes.TODO_TOGGLE_REQUEST:
     case TodosActionsTypes.TODO_EDIT_TITLE_REQUEST:
+    case TodosActionsTypes.GET_TOKEN_REQUEST:
       return { ...state, loading: true }
 
     case TodosActionsTypes.FETCH_TODOS_SUCCESS:

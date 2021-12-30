@@ -3,6 +3,16 @@ import { callApi } from '../api/api'
 import { AddTodoPayload, DeleteTodoPayload, EditTodoPayload, TodosActionsTypes, ToggleAllPayload } from '../types/actionTypes'
 import { Todo } from '../types/todosTypes'
 
+function* getToken({ options }: {options: {id: number}; type: string}): Generator {
+  try {
+    const payload: any = yield call(callApi, '/', { method: 'GET', params: options })
+    console.log(payload)
+    yield put({ type: TodosActionsTypes.GET_TOKEN_SUCCESS, payload})
+  } catch (err) {
+    console.warn(err)
+    yield put({ type: TodosActionsTypes.GET_TOKEN_FAILED})
+  }
+}
 
 function* fetchTodos() {
   try {
@@ -81,4 +91,5 @@ export function* todosWatcher() {
   yield takeEvery(TodosActionsTypes.TODO_ADD_REQUEST, addTodo)
   yield takeEvery(TodosActionsTypes.TODO_TOGGLE_REQUEST, editTodo)
   yield takeEvery(TodosActionsTypes.TODO_EDIT_TITLE_REQUEST, editTodo)
+  yield takeEvery(TodosActionsTypes.GET_TOKEN_REQUEST, getToken)
 }
