@@ -6,7 +6,7 @@ import { Todo } from '../types/todosTypes'
 function* getToken({ options }: {options: {id: number}; type: string}): Generator {
   try {
     const payload: any = yield call(callApi, '/', { method: 'GET', params: options })
-    console.log(payload)
+    localStorage.token = payload
     yield put({ type: TodosActionsTypes.GET_TOKEN_SUCCESS, payload})
   } catch (err) {
     console.warn(err)
